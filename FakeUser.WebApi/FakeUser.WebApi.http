@@ -1,6 +1,4 @@
-@FakeUser.WebApi_HostAddress = http://localhost:5257
-
-GET {{FakeUser.WebApi_HostAddress}}/weatherforecast/
+GET http://localhost:5257/api/v0/users
 Accept: application/json
 
 ###

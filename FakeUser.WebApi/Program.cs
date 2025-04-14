@@ -1,34 +1,38 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using FakeUser.Model;
+using FakeUser.WebApi.DAL;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+/*builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    options.SerializerOptions.PropertyNameCaseInsensitive = true;
+});*/
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+const string baseUrl = "/api/v0/users";
 
-app.MapGet("/weatherforecast", () =>
+app.MapGet(baseUrl, () =>
 {
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-            new WeatherForecast
-            (
-                DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                Random.Shared.Next(-20, 55),
-                summaries[Random.Shared.Next(summaries.Length)]
-            ))
-        .ToArray();
-    return forecast;
+    var db = new UserContext(connectionString);
+    return SlowStreamAsync(db.Users);
 });
 
-app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+await app.RunAsync();
+return;
+
+async IAsyncEnumerable<User> SlowStreamAsync(IEnumerable<User> users)
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    foreach (var user in users)
+    {
+        await Task.Delay(TimeSpan.FromSeconds(10));
+        yield return user;
+    }
 }
