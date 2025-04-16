@@ -1,14 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 using Microsoft.EntityFrameworkCore;
+
 using FakeUser.Model;
 using FakeUser.WebApi.DAL;
-using Microsoft.AspNetCore.Http;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,7 +26,12 @@ builder.Services.AddDbContext<UserContext>(options =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment()) app.MapOpenApi();
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+
+    app.UseSwaggerUI(options => { options.SwaggerEndpoint("/openapi/v1.json", "v1"); });
+}
 
 app.UseHttpsRedirection();
 
@@ -61,17 +70,17 @@ endPoint.MapPut("/{id:int}", async (UserContext db, int id, User user) =>
     .Produces(StatusCodes.Status404NotFound);
 
 endPoint.MapDelete("/{id:int}", async (UserContext db, int id) =>
-{
-    var userToDelete = await db.Users.SingleOrDefaultAsync(u => u.Id == id);
+    {
+        var userToDelete = await db.Users.SingleOrDefaultAsync(u => u.Id == id);
 
-    if (userToDelete == null) return Results.NotFound();
+        if (userToDelete == null) return Results.NotFound();
 
-    db.Users.Remove(userToDelete);
-    await db.SaveChangesAsync();
+        db.Users.Remove(userToDelete);
+        await db.SaveChangesAsync();
 
-    return Results.Ok();
-}).Produces(StatusCodes.Status200OK)
-.Produces(StatusCodes.Status404NotFound);
+        return Results.Ok();
+    }).Produces(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status404NotFound);
 
 await app.RunAsync();
 return;
