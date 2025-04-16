@@ -6,6 +6,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FakeUser.Model", "FakeUser.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FakeUser.ConsoleApp", "FakeUser.ConsoleApp\FakeUser.ConsoleApp.csproj", "{76F77C74-8647-442E-AD4E-2E6A91FDFD13}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "items", "items", "{51A2A937-60D2-46CD-8107-16E931AF857B}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		compose.yaml = compose.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -1,18 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using FakeUser.Model;
 using FakeUser.WebApi.DAL;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-/*builder.Services.ConfigureHttpJsonOptions(options =>
-{
-    options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-    options.SerializerOptions.PropertyNameCaseInsensitive = true;
-});*/
 var app = builder.Build();
 app.UseHttpsRedirection();
 

@@ -1,0 +1,27 @@
+﻿services:
+  webapi:
+    container_name: webapi
+    image: fake-user_webapi
+    build:
+      context: .
+      dockerfile: FakeUser.WebApi/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=db;Database=fake_users_db;Username=postgres;Password=1234"
+  db:
+    container_name: db
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234      
+      POSTGRES_DB: fake_users_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: { }
