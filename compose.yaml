@@ -16,7 +16,7 @@
     image: postgres:17
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234      
+      POSTGRES_PASSWORD: 1234
       POSTGRES_DB: fake_users_db
     ports:
       - "5432:5432"

@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "items", "items", "{51A2A937
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		compose.yaml = compose.yaml
+		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
 Global
