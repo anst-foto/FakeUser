@@ -1,0 +1,71 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:FakeUser.Desktop.ViewModels"
+        xmlns:c="using:Components"
+        xmlns:m="using:FakeUser.Model"
+
+        x:Class="FakeUser.Desktop.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+
+        Icon="/Assets/avalonia-logo.ico"
+        Title="FakeUser.Desktop"
+
+        Width="800"
+        Height="375">
+
+    <Window.Styles>
+        <StyleInclude Source="Styles.axaml"/>
+    </Window.Styles>
+
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <DataTemplate x:Key="TemplateUser" DataType="{x:Type m:User}">
+            <TextBlock>
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0} {1}">
+                        <Binding Path="LastName"/>
+                        <Binding Path="FirstName"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid ColumnDefinitions="*, 3*">
+        <ListBox ItemsSource="{Binding Users}"
+                 SelectedItem="{Binding SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 SelectionMode="Single"
+                 ItemTemplate="{StaticResource TemplateUser}"
+                 Grid.Column="0"/>
+
+        <StackPanel Orientation="Vertical"
+                    Grid.Column="1">
+            <Button Content="Загрузить"
+                    Command="{Binding LoadCommand}"/>
+
+            <StackPanel Orientation="Vertical">
+                <c:InputComponent Label="ID"
+                                  Text="{Binding Id}"
+                                  IsReadOnly="True"/>
+                <c:InputComponent Label="Фамилия"
+                                  Text="{Binding LastName}"/>
+                <c:InputComponent Label="Имя"
+                                  Text="{Binding FirstName}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Сохранить"
+                        Classes="save"
+                        Command="{Binding SaveUserCommand}"/>
+                <Button Content="Удалить"
+                        Command="{Binding DeleteUserCommand}"
+                        Classes="delete"/>
+                <Button Content="Очистить"
+                        Command="{Binding ClearCommand}"
+                        Classes="clear"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
